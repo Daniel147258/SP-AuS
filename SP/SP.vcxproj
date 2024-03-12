@@ -131,6 +131,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Algorithms.h" />
     <ClInclude Include="ConsoleApp.h" />
     <ClInclude Include="Reader.h" />
     <ClInclude Include="Region.h" />
@@ -139,9 +140,6 @@
     <ClInclude Include="TerritorialUnit.h" />
     <ClInclude Include="TerritoryData.h" />
     <ClInclude Include="Village.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\..\Downloads\CR-Transform.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

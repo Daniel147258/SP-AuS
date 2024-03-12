@@ -5,24 +5,33 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+#include <cctype>
 
 class Reader {
 
 public:
 
-	Reader()
-	{
-	}
+    Reader()
+    {
+    }
 
-	// Pointer t zanikne v rámci metódy
-	void loadAllTerritoryData(const std::string& nameOfFile, TerritoryData* t) {
+    // Odstrani medezeri v stringu potrebne na prevod cisiel cez std::stoi
+    void removeSpaces(std::string& str) {
+        str.erase(std::remove_if(str.begin(), str.end(), [](unsigned char c) { return std::isspace(c); }), str.end());
+    }
 
-		std::ifstream file(nameOfFile);
-        
-		if (!file.is_open()) {
-			std::cerr << "Failed to open file: " << nameOfFile << std::endl;
-		}
- 
+    // Pointer t zanikne v rámci metódy
+    bool loadAllTerritoryData(const std::string& nameOfFile, TerritoryData* t) {
+
+        std::ifstream file(nameOfFile);
+
+        if (!file.is_open()) {
+            std::cerr << "Failed to open file: " << nameOfFile << std::endl;
+            return false;
+        }
+        // odstranenie hlavicky v suboru ktora predstavuje 3 bajty 
+        file.ignore(3);
         State state("Èeská republika", "120AH");
         std::string line;
         int counter = 0;
@@ -56,10 +65,19 @@ public:
             std::getline(iss, waterSupply, ';');
             std::getline(iss, gass, ';');
 
+            removeSpaces(partsOfVillage);
+            removeSpaces(numberCadastre);
+            removeSpaces(cadastreArea);
+            removeSpaces(numberOfPeople);
+            removeSpaces(people14);
+            removeSpaces(people65);
+            removeSpaces(canalization);
+            removeSpaces(waterSupply);
+            removeSpaces(gass);
 
-            // Osetrenie Kanalizacie a atd.. 
+            // Osetrenie Kanalizacie a ...atd kvoli znakom ako su "-" ...atd
             try {
-               std::stoi(canalization);
+                std::stoi(canalization);
             }
             catch (const std::invalid_argument&) {
                 canalization = "0";
@@ -69,7 +87,7 @@ public:
             }
 
             try {
-               std::stoi(waterSupply);
+                std::stoi(waterSupply);
             }
             catch (const std::invalid_argument&) {
                 waterSupply = "0";
@@ -122,18 +140,19 @@ public:
                         people14Int, people65Int, canalizationInt, waterSupplyInt, gassInt));
                 }
                 catch (const std::invalid_argument& e) {
-                    
+
                     std::cerr << "Error: Village have wrong parameter(Expected number) at line: " << numberLine << " " << e.what() << std::endl;
                 }
                 catch (const std::out_of_range& e) {
                     std::cerr << "Error: Number is out of range in integer:  at line: " << numberLine << " " << e.what() << std::endl;
                 }
-                
+
             }
-			
+
         }
         file.close();
-	}
+        return true;
+    }
 
 
 };

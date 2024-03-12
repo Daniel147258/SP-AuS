@@ -13,18 +13,21 @@ private:
 
 public:
 
-	SOORP( std::string& name,  std::string& code, Region& region)
+	SOORP(std::string& name, std::string& code, Region& region)
 		: TerritorialUnit(name, code), region_(region)
 	{
-
 	}
 
-	TerritorialUnit& getPrevious() override 
+	TerritorialUnit& getPrevious() override
 	{
 		return region_;
 	}
 
 	const std::string& getTeritoryType() override {
 		return territoryType_;
+	}
+
+	std::string toString() override {
+		return "- Name: " + getName() + "\n- Code: " + getCode() + "\n- Type: " + territoryType_ + "\n";
 	}
 };

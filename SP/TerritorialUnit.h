@@ -12,20 +12,18 @@ private:
 	std::string code_;
 
 public:
-	
-	TerritorialUnit(std::string& name, std::string& code)
-		: name_(name), code_(code) 
-	{
 
+	TerritorialUnit(std::string& name, std::string& code)
+		: name_(name), code_(code)
+	{
 	}
 
 	TerritorialUnit(const char* name, const char* code)
-		: name_(name), code_(code) 
+		: name_(name), code_(code)
 	{
-
 	}
 
-	const std::string& getName() const 
+	const std::string& getName() const
 	{
 		return name_;
 	}
@@ -37,5 +35,5 @@ public:
 
 	virtual TerritorialUnit& getPrevious() = 0;
 	virtual const std::string& getTeritoryType() = 0;
+	virtual std::string toString() = 0;
 };
-	

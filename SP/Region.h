@@ -14,18 +14,20 @@ private:
 public:
 
 
-	Region(std::string& name,  std::string& code, State& state)
+	Region(std::string& name, std::string& code, State& state)
 		: TerritorialUnit(name, code), state_(state)
 	{
-
 	}
-	
-	
+
 	TerritorialUnit& getPrevious() override {
 		return state_;
 	}
 
 	const std::string& getTeritoryType() override {
 		return territoryType_;
+	}
+
+	std::string toString() override {
+		return "- Name: " + getName() + "\n- Code: " + getCode() + "\n- Type: " + territoryType_ + "\n";
 	}
 };
