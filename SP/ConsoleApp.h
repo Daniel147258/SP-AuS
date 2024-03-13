@@ -45,10 +45,10 @@ private:
 					if (chooseOption2 == "1") {
 						std::cout << "Input pattern: ";
 						std::cin >> chooseOption2;
-						auto startsWithPr = [chooseOption2](const std::string& name) {
-							return name.substr(0, chooseOption2.length()) == chooseOption2;
+						
+						auto startsWithPr = [chooseOption2](TerritorialUnit* unit) {
+							return (unit)->getName().substr(0, chooseOption2.length()) == chooseOption2;
 							};
-
 						if (chooseOption == "1")
 							td_->findAllByName(startsWithPr);
 						else if (chooseOption == "2")
@@ -64,8 +64,8 @@ private:
 					else if (chooseOption2 == "2") {
 						std::cout << "Input pattern: ";
 						std::cin >> chooseOption2;
-						auto containsStr = [chooseOption2](const std::string& name) {
-							return name.find(chooseOption2) != std::string::npos;
+						auto containsStr = [chooseOption2](TerritorialUnit* unit ) {
+							return unit->getName().find(chooseOption2) != std::string::npos;
 							};
 
 						if (chooseOption == "1")

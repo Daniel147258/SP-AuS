@@ -145,13 +145,13 @@ public:
 		}
 	}
 
-	void findVillagesByName(std::function<bool(const std::string&)> predicate) {
+	void findVillagesByName(std::function<bool(TerritorialUnit*)> predicate) {
 		if (!allow_) {
 			sortedData.clear();
-			sortedData = alg_->filterGetName<const std::string&>(villages_.begin(), villages_.end(), predicate);
+			sortedData = alg_->filter<TerritorialUnit*>(villages_.begin(), villages_.end(), predicate);
 		}
 		else {
-			std::vector<TerritorialUnit*> local = alg_->filterGetName<const std::string&>(villages_.begin(), villages_.end(), predicate);
+			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(villages_.begin(), villages_.end(), predicate);
 			for (auto& a : local) {
 				sortedData.push_back(a);
 			}
@@ -159,13 +159,13 @@ public:
 		}
 	}
 
-	void findRegionsByName(std::function<bool(const std::string&)> predicate) {
+	void findRegionsByName(std::function<bool(TerritorialUnit*)> predicate) {
 		if (!allow_) {
 			sortedData.clear();
-			sortedData = alg_->filterGetName<const std::string&>(regions_.begin(), regions_.end(), predicate);
+			sortedData = alg_->filter<TerritorialUnit*>(regions_.begin(), regions_.end(), predicate);
 		}
 		else {
-			std::vector<TerritorialUnit*> local = alg_->filterGetName<const std::string&>(regions_.begin(), regions_.end(), predicate);
+			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(regions_.begin(), regions_.end(), predicate);
 			for (auto& a : local) {
 				sortedData.push_back(a);
 			}
@@ -173,13 +173,13 @@ public:
 		}
 	}
 
-	void findSoorpsByName(std::function<bool(const std::string&)> predicate) {
+	void findSoorpsByName(std::function<bool(TerritorialUnit*)> predicate) {
 		if (!allow_) {
 			sortedData.clear();
-			sortedData = alg_->filterGetName<const std::string&>(soorps_.begin(), soorps_.end(), predicate);
+			sortedData = alg_->filter<TerritorialUnit*>(soorps_.begin(), soorps_.end(), predicate);
 		}
 		else {
-			std::vector<TerritorialUnit*> local = alg_->filterGetName<const std::string&>(soorps_.begin(), soorps_.end(), predicate);
+			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(soorps_.begin(), soorps_.end(), predicate);
 			for (auto& a : local) {
 				sortedData.push_back(a);
 			}
@@ -187,7 +187,7 @@ public:
 		}
 	}
 
-	void findAllByName(std::function<bool(const std::string&)> predicate) {
+	void findAllByName(std::function<bool(TerritorialUnit*)> predicate) {
 		allow_ = true;
 		findRegionsByName(predicate);
 		findSoorpsByName(predicate);

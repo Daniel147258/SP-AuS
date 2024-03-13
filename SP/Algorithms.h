@@ -19,15 +19,14 @@ public:
 	}
 
 	template<typename Factor>
-	std::vector<Data> filterGetName(Iterator begin, Iterator end, std::function<bool(Factor)> predicate) {
+	std::vector<Data> filter(Iterator begin, Iterator end, std::function<bool(Factor)> predicate) {
 		std::vector<Data> filteredUnits;
 		for (auto it = begin; it != end; ++it) {
-			if (predicate((*it)->getName())) {
+			if (predicate((*it))) {
 				filteredUnits.push_back((*it));
 			}
 		}
 
 		return filteredUnits;
 	}
-
 };
