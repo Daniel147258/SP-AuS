@@ -55,6 +55,8 @@ public:
 
 		sortedData.clear();
 
+		delete alg_;
+
 	}
 
 	void addRegion(Region* region) {
@@ -145,7 +147,7 @@ public:
 		}
 	}
 
-	void findVillagesByName(std::function<bool(TerritorialUnit*)> predicate) {
+	void findVillages(std::function<bool(TerritorialUnit*)> predicate) {
 		if (!allow_) {
 			sortedData.clear();
 			sortedData = alg_->filter<TerritorialUnit*>(villages_.begin(), villages_.end(), predicate);
@@ -159,7 +161,7 @@ public:
 		}
 	}
 
-	void findRegionsByName(std::function<bool(TerritorialUnit*)> predicate) {
+	void findRegions(std::function<bool(TerritorialUnit*)> predicate) {
 		if (!allow_) {
 			sortedData.clear();
 			sortedData = alg_->filter<TerritorialUnit*>(regions_.begin(), regions_.end(), predicate);
@@ -173,7 +175,7 @@ public:
 		}
 	}
 
-	void findSoorpsByName(std::function<bool(TerritorialUnit*)> predicate) {
+	void findSoorps(std::function<bool(TerritorialUnit*)> predicate) {
 		if (!allow_) {
 			sortedData.clear();
 			sortedData = alg_->filter<TerritorialUnit*>(soorps_.begin(), soorps_.end(), predicate);
@@ -187,11 +189,11 @@ public:
 		}
 	}
 
-	void findAllByName(std::function<bool(TerritorialUnit*)> predicate) {
+	void findInAllCategories(std::function<bool(TerritorialUnit*)> predicate) {
 		allow_ = true;
-		findRegionsByName(predicate);
-		findSoorpsByName(predicate);
-		findVillagesByName(predicate);
+		findRegions(predicate);
+		findSoorps(predicate);
+		findVillages(predicate);
 		allow_ = false;
 	}
 };

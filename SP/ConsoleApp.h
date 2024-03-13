@@ -50,13 +50,13 @@ private:
 							return (unit)->getName().substr(0, chooseOption2.length()) == chooseOption2;
 							};
 						if (chooseOption == "1")
-							td_->findAllByName(startsWithPr);
+							td_->findInAllCategories(startsWithPr);
 						else if (chooseOption == "2")
-							td_->findRegionsByName(startsWithPr);
+							td_->findRegions(startsWithPr);
 						else if (chooseOption == "3")
-							td_->findSoorpsByName(startsWithPr);
+							td_->findSoorps(startsWithPr);
 						else if (chooseOption == "4")
-							td_->findVillagesByName(startsWithPr);
+							td_->findVillages(startsWithPr);
 
 						td_->printSorted();
 					}
@@ -69,13 +69,13 @@ private:
 							};
 
 						if (chooseOption == "1")
-							td_->findAllByName(containsStr);
+							td_->findInAllCategories(containsStr);
 						else if (chooseOption == "2")
-							td_->findRegionsByName(containsStr);
+							td_->findRegions(containsStr);
 						else if (chooseOption == "3")
-							td_->findSoorpsByName(containsStr);
+							td_->findSoorps(containsStr);
 						else if (chooseOption == "4")
-							td_->findVillagesByName(containsStr);
+							td_->findVillages(containsStr);
 
 						td_->printSorted();
 					}
