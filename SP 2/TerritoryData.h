@@ -9,6 +9,11 @@
 #include "TerritorialUnit.h"
 #include <vector>
 #include "Algorithms.h"
+#include <libds/heap_monitor.h>
+#include <libds/amt/explicit_hierarchy.h>
+
+using MuT = ds::amt::MultiWayExplicitHierarchy<TerritorialUnit*>;
+using Block = ds::amt::MultiWayExplicitHierarchyBlock<TerritorialUnit*>;
 
 class TerritoryData {
 
@@ -21,6 +26,9 @@ private:
 	std::vector<TerritorialUnit*> sortedData;
 	// Sluzi na tredenie dat
 	bool allow_;
+	//Viac cestna hierarchia
+	MuT* hierarchy;
+
 
 public:
 
@@ -28,35 +36,43 @@ public:
 	{
 		alg_ = new Algorithms<TerritorialUnit*, std::vector<TerritorialUnit*>::iterator >();
 		allow_ = false;
+		hierarchy = new MuT();
+		hierarchy->emplaceRoot().data_ = &state_;
 	}
 
 	~TerritoryData() {
-
+		delete hierarchy; // Malo by svetko co je v hierarchii vymazat pomocou post order 
 		for (auto r : regions_)
 		{
-			delete r;
-			r = nullptr;
+			if (r != nullptr) {
+				delete r;
+				r = nullptr;
+			}
 		}
 		regions_.clear();
 
 		for (auto s : soorps_)
 		{
-			delete s;
-			s = nullptr;
+			if (s != nullptr) {
+				delete s;
+				s = nullptr;
+			}
 		}
 		soorps_.clear();
 
 		for (auto v : villages_)
 		{
-			delete v;
-			v = nullptr;
+			if (v != nullptr) {
+				delete v;
+				v = nullptr;
+			}
 		}
 		villages_.clear();
 
 		sortedData.clear();
 
 		delete alg_;
-		state_.~State();
+		//state_.~State(); to mazem uz vyssie
 
 	}
 
@@ -190,12 +206,19 @@ public:
 		}
 	}
 
-	
 	void findInAllCategories(std::function<bool(TerritorialUnit*)> predicate) {
 		allow_ = true;
 		findRegions(predicate);
 		findSoorps(predicate);
 		findVillages(predicate);
 		allow_ = false;
+	}
+
+	void addSon(Block* parent, Block* son) {
+		parent->sons_->insertLast().data_ = son;
+	}
+	
+	MuT& getHierarchy() {
+		return *hierarchy;
 	}
 };
