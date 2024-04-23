@@ -469,7 +469,7 @@ namespace ds::amt {
 		// TODO
 		if (DepthFirstIterator::tryFindNextSonInCurrentPosition())
 		{
-			savePosition(DepthFirstIterator::currentPosition_->currentSon_);
+			this->savePosition(DepthFirstIterator::currentPosition_->currentSon_);
 		}
 		else
 		{

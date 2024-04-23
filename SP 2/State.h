@@ -3,7 +3,7 @@
 #include <functional>
 #include "TerritorialUnit.h"
 #include <stdexcept>
-#include <libds/heap_monitor.h>
+
 
 class State : public TerritorialUnit {
 
@@ -22,6 +22,7 @@ public:
 		: TerritorialUnit(name, code)
 	{
 	}
+
 	~State() {
 
 	}

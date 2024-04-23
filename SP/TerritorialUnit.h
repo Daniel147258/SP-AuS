@@ -23,6 +23,8 @@ public:
 	{
 	}
 
+	virtual ~TerritorialUnit() = default;
+
 	const std::string& getName() const
 	{
 		return name_;

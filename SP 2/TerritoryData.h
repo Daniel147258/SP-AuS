@@ -9,70 +9,79 @@
 #include "TerritorialUnit.h"
 #include <vector>
 #include "Algorithms.h"
-#include <libds/heap_monitor.h>
 #include <libds/amt/explicit_hierarchy.h>
+#include <libds/heap_monitor.h>
 
 using MuT = ds::amt::MultiWayExplicitHierarchy<TerritorialUnit*>;
 using Block = ds::amt::MultiWayExplicitHierarchyBlock<TerritorialUnit*>;
-
+using It = MuT::PreOrderHierarchyIterator;
 class TerritoryData {
+
 
 private:
 	State& state_;
 	std::vector<TerritorialUnit*> regions_;
 	std::vector<TerritorialUnit*> soorps_;
 	std::vector<TerritorialUnit*> villages_;
-	Algorithms<TerritorialUnit*, std::vector<TerritorialUnit*>::iterator >* alg_;
+	Algorithms* alg_ = nullptr;
 	std::vector<TerritorialUnit*> sortedData;
 	// Sluzi na tredenie dat
 	bool allow_;
 	//Viac cestna hierarchia
-	MuT* hierarchy;
-
+	MuT* hierarchy = nullptr;
+	
 
 public:
 
 	TerritoryData(State& state) : state_(state)
 	{
-		alg_ = new Algorithms<TerritorialUnit*, std::vector<TerritorialUnit*>::iterator >();
+		alg_ = new Algorithms();
 		allow_ = false;
 		hierarchy = new MuT();
-		hierarchy->emplaceRoot().data_ = &state_;
+		
 	}
 
 	~TerritoryData() {
-		delete hierarchy; // Malo by svetko co je v hierarchii vymazat pomocou post order 
-		for (auto r : regions_)
+		if (hierarchy != nullptr) {
+			delete hierarchy; // Malo by svetko co je v hierarchii vymazat pomocou post order 
+			hierarchy = nullptr;
+		}
+			
+		for (auto* r : regions_)
 		{
 			if (r != nullptr) {
 				delete r;
-				r = nullptr;
+				//r = nullptr;
 			}
 		}
 		regions_.clear();
 
-		for (auto s : soorps_)
+		for (auto* s : soorps_)
 		{
 			if (s != nullptr) {
 				delete s;
-				s = nullptr;
+				//s = nullptr;
 			}
 		}
 		soorps_.clear();
 
-		for (auto v : villages_)
+		for (auto* v : villages_)
 		{
 			if (v != nullptr) {
 				delete v;
-				v = nullptr;
+				//v = nullptr;
 			}
 		}
 		villages_.clear();
 
 		sortedData.clear();
 
-		delete alg_;
-		//state_.~State(); to mazem uz vyssie
+		if (alg_ != nullptr) {
+			delete alg_;
+			alg_ = nullptr;
+		}
+			
+		
 
 	}
 
@@ -128,14 +137,6 @@ public:
 		}
 	}
 
-	void printSoorps() {
-		std::cout << "---------------------------------------------------" << std::endl;
-		std::cout << "SOORPs:" << std::endl;
-		for (auto a : soorps_) {
-			std::cout << "Name: " << a->getName() << ", Code: " << a->getCode() << ", Type: " << a->getTeritoryType() << std::endl;
-		}
-	}
-
 	void printVillageInformation(std::string& nameOfVillage) {
 		bool find = false;
 		for (auto a : villages_) {
@@ -164,61 +165,46 @@ public:
 		}
 	}
 
-	void findVillages(std::function<bool(TerritorialUnit*)> predicate) {
-		if (!allow_) {
-			sortedData.clear();
-			sortedData = alg_->filter<TerritorialUnit*>(villages_.begin(), villages_.end(), predicate);
-		}
-		else {
-			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(villages_.begin(), villages_.end(), predicate);
-			for (auto& a : local) {
-				sortedData.push_back(a);
-			}
-			local.clear();
-		}
-	}
-
-	void findRegions(std::function<bool(TerritorialUnit*)> predicate) {
-		if (!allow_) {
-			sortedData.clear();
-			sortedData = alg_->filter<TerritorialUnit*>(regions_.begin(), regions_.end(), predicate);
-		}
-		else {
-			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(regions_.begin(), regions_.end(), predicate);
-			for (auto& a : local) {
-				sortedData.push_back(a);
-			}
-			local.clear();
-		}
-	}
-
-	void findSoorps(std::function<bool(TerritorialUnit*)> predicate) {
-		if (!allow_) {
-			sortedData.clear();
-			sortedData = alg_->filter<TerritorialUnit*>(soorps_.begin(), soorps_.end(), predicate);
-		}
-		else {
-			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(soorps_.begin(), soorps_.end(), predicate);
-			for (auto& a : local) {
-				sortedData.push_back(a);
-			}
-			local.clear();
-		}
-	}
-
-	void findInAllCategories(std::function<bool(TerritorialUnit*)> predicate) {
-		allow_ = true;
-		findRegions(predicate);
-		findSoorps(predicate);
-		findVillages(predicate);
-		allow_ = false;
-	}
 
 	void addSon(Block* parent, Block* son) {
-		parent->sons_->insertLast().data_ = son;
+		if (hierarchy->isRoot(*parent)) {
+			hierarchy->accessRoot()->sons_->insertLast().data_ = son;
+		}
+		else {
+			hierarchy->accessParent(*son)->sons_->insertLast().data_ = son;
+		}
 	}
 	
+	template<typename IteratorType>
+	void find(IteratorType begin, IteratorType end, std::function<bool(TerritorialUnit*)> predicate) {
+		sortedData = alg_->filter<TerritorialUnit*, TerritorialUnit*, IteratorType>(begin, end, predicate);
+	}
+
+	const std::vector<TerritorialUnit*>& getRegions() const {
+		return regions_;
+	}
+
+	
+	const std::vector<TerritorialUnit*>& getSoorps() const {
+		return soorps_;
+	}
+
+	
+	const std::vector<TerritorialUnit*>& getVillages() const {
+		return villages_;
+	}
+
 	MuT& getHierarchy() {
 		return *hierarchy;
 	}
+
+	TerritorialUnit& getState() {
+		return state_;
+	}
+
+	void clearSortedData() {
+		sortedData.clear();
+	}
+
+
 };

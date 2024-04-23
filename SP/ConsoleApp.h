@@ -45,39 +45,66 @@ private:
 					if (chooseOption2 == "1") {
 						std::cout << "Input pattern: ";
 						std::cin >> chooseOption2;
-						
-						auto startsWithPr = [chooseOption2](TerritorialUnit* unit) {
-							return (unit)->getName().substr(0, chooseOption2.length()) == chooseOption2;
-							};
-						if (chooseOption == "1")
-							td_->findInAllCategories(startsWithPr);
-						else if (chooseOption == "2")
-							td_->findRegions(startsWithPr);
-						else if (chooseOption == "3")
-							td_->findSoorps(startsWithPr);
-						else if (chooseOption == "4")
-							td_->findVillages(startsWithPr);
 
-						td_->printSorted();
+						if (chooseOption == "1") {
+							startWithStrPredicate(td_->getRegions().begin(), td_->getRegions().end(), chooseOption2);
+							td_->printSorted();
+							startWithStrPredicate(td_->getSoorps().begin(), td_->getSoorps().end(), chooseOption2);
+							td_->printSorted();
+							startWithStrPredicate(td_->getVillages().begin(), td_->getVillages().end(), chooseOption2);
+							td_->printSorted();
+						}
+
+
+						else if (chooseOption == "2") {
+							startWithStrPredicate(td_->getRegions().begin(), td_->getRegions().end(), chooseOption2);
+						}
+
+						else if (chooseOption == "3") {
+							startWithStrPredicate(td_->getSoorps().begin(), td_->getSoorps().end(), chooseOption2);
+						}
+
+						else if (chooseOption == "4") {
+							startWithStrPredicate(td_->getVillages().begin(), td_->getVillages().end(), chooseOption2);
+						}
+
+						if (chooseOption != "1") {
+							td_->printSorted();
+						}
+						td_->clearSortedData();
 					}
 
 					else if (chooseOption2 == "2") {
 						std::cout << "Input pattern: ";
 						std::cin >> chooseOption2;
-						auto containsStr = [chooseOption2](TerritorialUnit* unit ) {
-							return unit->getName().find(chooseOption2) != std::string::npos;
-							};
 
-						if (chooseOption == "1")
-							td_->findInAllCategories(containsStr);
-						else if (chooseOption == "2")
-							td_->findRegions(containsStr);
-						else if (chooseOption == "3")
-							td_->findSoorps(containsStr);
-						else if (chooseOption == "4")
-							td_->findVillages(containsStr);
 
-						td_->printSorted();
+						if (chooseOption == "1") {
+							containStrPredicate(td_->getRegions().begin(), td_->getRegions().end(), chooseOption2);
+							td_->printSorted();
+							containStrPredicate(td_->getSoorps().begin(), td_->getSoorps().end(), chooseOption2);
+							td_->printSorted();
+							containStrPredicate(td_->getVillages().begin(), td_->getVillages().end(), chooseOption2);
+							td_->printSorted();
+
+						}
+
+						else if (chooseOption == "2") {
+							containStrPredicate(td_->getRegions().begin(), td_->getRegions().end(), chooseOption2);
+						}
+
+						else if (chooseOption == "3") {
+							containStrPredicate(td_->getSoorps().begin(), td_->getSoorps().end(), chooseOption2);
+						}
+
+						else if (chooseOption == "4") {
+							containStrPredicate(td_->getVillages().begin(), td_->getVillages().end(), chooseOption2);
+						}
+						if (chooseOption != "1") {
+							td_->printSorted();
+						}
+
+						td_->clearSortedData();
 					}
 
 					else if (chooseOption2 == "@") {
@@ -165,6 +192,7 @@ public:
 
 	~ConsoleApp()
 	{
+
 		delete td_;
 	}
 
@@ -219,9 +247,42 @@ public:
 			}
 		}
 		std::cout << "- Application ended sucessfuly\n";
+		delete r;
 	}
 
+	//Predikaty
+	template<typename Iterator2>
+	void startWithStrPredicate(Iterator2 begin, Iterator2 end, std::string param) {
+		auto startsWithPr = [param](TerritorialUnit* unit) {
+			return unit->getName().substr(0, param.length()) == param;
+			};
+		td_->find(begin, end, startsWithPr);
 
+	}
+
+	template<typename Iterator2>
+	void containStrPredicate(Iterator2 begin, Iterator2 end, std::string param) {
+
+		auto containsStr = [param](TerritorialUnit* unit) {
+			return unit->getName().find(param) != std::string::npos;
+			};
+
+		td_->find(begin, end, containsStr);
+
+
+	}
+
+	template<typename Iterator2>
+	void hasTypePredicate(Iterator2 begin, Iterator2 end, std::string param) {
+
+		auto hasType = [param](TerritorialUnit* unit) {
+			return unit->getTeritoryType() == param;
+			};
+
+
+		td_->find(begin, end, hasType);
+
+	}
 
 
 };

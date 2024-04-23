@@ -3,7 +3,7 @@
 #include <functional>
 #include "TerritorialUnit.h"
 #include "State.h"
-#include <libds/heap_monitor.h>
+
 
 class Region : public TerritorialUnit {
 
@@ -18,6 +18,10 @@ public:
 	Region(std::string& name, std::string& code, TerritorialUnit* state)
 		: TerritorialUnit(name, code), state_(state)
 	{
+	}
+
+	~Region() {
+
 	}
 
 	TerritorialUnit& getPrevious() override {

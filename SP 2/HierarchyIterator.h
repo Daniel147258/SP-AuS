@@ -1,6 +1,6 @@
 #pragma once
 #include "TerritorialUnit.h"
-#include <libds/amt/explicit_hierarchy.h>
+
 
 const int MIN_LEVEL_ = 0;
 const int MAX_LEVEL_ = 3;
@@ -11,24 +11,33 @@ class HierarchyIterator
 {
 private:
     Block* actualBlock_;
+    MuT* hierarchy;
     size_t level_;
 
 public:
 
-    HierarchyIterator(Block& root_Block){
-        actualBlock_ = &root_Block;
+    HierarchyIterator(MuT* hierarchy){
+        this->hierarchy = hierarchy;
+        actualBlock_ = this->hierarchy->accessRoot();
         level_ = 0;
     }
 
-    ~HierarchyIterator(){}
+    ~HierarchyIterator(){
+       
+    }
 
     void goPrevious() {
         if (level_ > MIN_LEVEL_)
         {
-            actualBlock_ = static_cast<Block*>(actualBlock_->parent_);
-            --level_;
-            std::cout << "Your actual node is:";
-            std::cout << actualBlock_->data_->getName() << "\n";
+            if (level_ == 1) { // osetrujem pretoze ze accessParent je static_cast ak by som ho zavolal nad rootom tak to vrati blbost
+                actualBlock_ = hierarchy->accessRoot();
+                --level_;
+            }
+            else {
+                actualBlock_ = hierarchy->accessParent(*actualBlock_);
+                --level_;
+            }
+           
         }
         else
         {
@@ -37,13 +46,11 @@ public:
     }
     
 
-    void goNext(int&& index) {
+    void goNext(int& index) {
         if (level_ < MAX_LEVEL_)
         {
-            actualBlock_ = static_cast<Block*>(actualBlock_->sons_->access(index)->data_);
+            actualBlock_ = actualBlock_->sons_->access(index)->data_;
             ++level_;
-            std::cout << "Your actual node is:";
-            std::cout << actualBlock_->data_->getName() << "\n";
         }
         else
         {

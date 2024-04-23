@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <functional>
-#include <libds/heap_monitor.h>
+
 
 
 class TerritorialUnit {
@@ -22,6 +22,8 @@ public:
 		: name_(name), code_(code)
 	{
 	}
+
+	virtual ~TerritorialUnit() = default;
 
 	const std::string& getName() const
 	{

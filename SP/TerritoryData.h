@@ -9,6 +9,7 @@
 #include "TerritorialUnit.h"
 #include <vector>
 #include "Algorithms.h"
+#include <libds/heap_monitor.h>
 
 class TerritoryData {
 
@@ -17,7 +18,7 @@ private:
 	std::vector<TerritorialUnit*> regions_;
 	std::vector<TerritorialUnit*> soorps_;
 	std::vector<TerritorialUnit*> villages_;
-	Algorithms<TerritorialUnit*, std::vector<TerritorialUnit*>::iterator >* alg_;
+	Algorithms* alg_;
 	std::vector<TerritorialUnit*> sortedData;
 	// Sluzi na tredenie dat
 	bool allow_;
@@ -26,7 +27,7 @@ public:
 
 	TerritoryData(State& state) : state_(state)
 	{
-		alg_ = new Algorithms<TerritorialUnit*, std::vector<TerritorialUnit*>::iterator >();
+		alg_ = new Algorithms();
 		allow_ = false;
 	}
 
@@ -148,54 +149,24 @@ public:
 		}
 	}
 
-	void findVillages(std::function<bool(TerritorialUnit*)> predicate) {
-		if (!allow_) {
-			sortedData.clear();
-			sortedData = alg_->filter<TerritorialUnit*>(villages_.begin(), villages_.end(), predicate);
-		}
-		else {
-			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(villages_.begin(), villages_.end(), predicate);
-			for (auto& a : local) {
-				sortedData.push_back(a);
-			}
-			local.clear();
-		}
+	template<typename IteratorType>
+	void find(IteratorType begin, IteratorType end, std::function<bool(TerritorialUnit*)> predicate) {
+		sortedData = alg_->filter<TerritorialUnit*, TerritorialUnit*, IteratorType>(begin, end, predicate);
 	}
 
-	void findRegions(std::function<bool(TerritorialUnit*)> predicate) {
-		if (!allow_) {
-			sortedData.clear();
-			sortedData = alg_->filter<TerritorialUnit*>(regions_.begin(), regions_.end(), predicate);
-		}
-		else {
-			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(regions_.begin(), regions_.end(), predicate);
-			for (auto& a : local) {
-				sortedData.push_back(a);
-			}
-			local.clear();
-		}
+	const std::vector<TerritorialUnit*>& getRegions() const {
+		return regions_;
 	}
 
-	void findSoorps(std::function<bool(TerritorialUnit*)> predicate) {
-		if (!allow_) {
-			sortedData.clear();
-			sortedData = alg_->filter<TerritorialUnit*>(soorps_.begin(), soorps_.end(), predicate);
-		}
-		else {
-			std::vector<TerritorialUnit*> local = alg_->filter<TerritorialUnit*>(soorps_.begin(), soorps_.end(), predicate);
-			for (auto& a : local) {
-				sortedData.push_back(a);
-			}
-			local.clear();
-		}
+	const std::vector<TerritorialUnit*>& getSoorps() const {
+		return soorps_;
 	}
 
-	
-	void findInAllCategories(std::function<bool(TerritorialUnit*)> predicate) {
-		allow_ = true;
-		findRegions(predicate);
-		findSoorps(predicate);
-		findVillages(predicate);
-		allow_ = false;
+	const std::vector<TerritorialUnit*>& getVillages() const {
+		return villages_;
+	}
+
+	void clearSortedData() {
+		sortedData.clear();
 	}
 };

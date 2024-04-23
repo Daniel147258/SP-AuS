@@ -6,7 +6,7 @@
 
 int main()
 {
-
+    initHeapMonitor();
     system("cls");
     // Kodovanie windows-1250 konzola aj subor
     SetConsoleOutputCP(1250);

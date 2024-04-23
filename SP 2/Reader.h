@@ -7,7 +7,6 @@
 #include <sstream>
 #include <algorithm>
 #include <cctype>
-#include <libds/heap_monitor.h>
 
 class Reader {
 
@@ -16,6 +15,8 @@ public:
     Reader()
     {
     }
+
+    ~Reader() {}
 
     // Odstrani medezeri v stringu potrebne na prevod cisiel cez std::stoi
     void removeSpaces(std::string& str) {
@@ -153,6 +154,7 @@ public:
         return true;
     }
 
+
     // nacita data ja do hierarchie
     bool loadAllTerritoryDataToHierarchy(const std::string& nameOfFile, TerritoryData* t) {
 
@@ -165,21 +167,14 @@ public:
         // odstranenie hlavicky v suboru ktora predstavuje 3 bajty 
         file.ignore(3);
         // Stat
-        TerritorialUnit* state = new State("Èeská republika", "120AH");
-        Block* stateBlock = new Block;
+        TerritorialUnit* state = &t->getState();
+        Block* stateBlock = new Block();
         stateBlock->parent_ = nullptr;
-        stateBlock->data_ = state;
-
-        //Region
+        stateBlock->data_ = &t->getState();
+        t->getHierarchy().changeRoot(stateBlock);
         Block* regionBlock = nullptr;
-
-        // Sooorp
         Block* soorpBlock = nullptr;
-
-        // dedina
         Block* villageBlock = nullptr;
-
-
         std::string line;
         int counter = 0;
         std::string regionName;
@@ -191,8 +186,7 @@ public:
             number, villageName, villageCode, villageType,
             partsOfVillage, numberCadastre, cadastreArea, numberOfPeople, people14, people65,
             canalization, waterSupply, gass;
-        
-        
+          
         while (std::getline(file, line)) {
             ++numberLine;
             std::istringstream iss(line);
@@ -299,6 +293,7 @@ public:
                     villageBlock->data_ = villagePtr;
                     t->addVillage(dynamic_cast<Village*>(villagePtr));
                     t->addSon(soorpBlock, villageBlock);
+                   
 
                 }
                 catch (const std::invalid_argument& e) {
@@ -312,6 +307,7 @@ public:
             }
 
         }
+       
         file.close();
         return true;
     }

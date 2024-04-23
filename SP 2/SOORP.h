@@ -3,7 +3,7 @@
 #include <functional>
 #include "TerritorialUnit.h"
 #include "Region.h"
-#include <libds/heap_monitor.h>
+
 
 class SOORP : public TerritorialUnit {
 
@@ -17,6 +17,10 @@ public:
 	SOORP(std::string& name, std::string& code, TerritorialUnit* region)
 		: TerritorialUnit(name, code), region_(region)
 	{
+	}
+
+	~SOORP() {
+
 	}
 
 	TerritorialUnit& getPrevious() override
