@@ -219,7 +219,7 @@ public:
 
             // Osetrenie Kanalizacie a ...atd kvoli znakom ako su "-" ...atd
             try {
-                std::stoi(canalization);
+                int a = std::stoi(canalization);
             }
             catch (const std::invalid_argument&) {
                 canalization = "0";
@@ -229,7 +229,7 @@ public:
             }
 
             try {
-                std::stoi(waterSupply);
+                int b = std::stoi(waterSupply);
             }
             catch (const std::invalid_argument&) {
                 waterSupply = "0";
@@ -239,7 +239,7 @@ public:
             }
 
             try {
-                std::stoi(gass);
+               int c = std::stoi(gass);
             }
             catch (const std::invalid_argument&) {
                 gass = "0";

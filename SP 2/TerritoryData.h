@@ -152,13 +152,14 @@ public:
 	}
 
 	void printSorted() {
-		std::cout << "\n----------------------------------------\nSorted Data:\n";
+		std::cout << "\n----------------------------------------\nSorted Data("<<  sortedData.size() <<"):\n";
 		if (!sortedData.empty()) {
 			for (auto& a : sortedData)
 			{
 				std::cout << a->toString();
 				std::cout << "\n----------------------------------------\n";
 			}
+			std::cout << "\nNumber of find data: " << sortedData.size() << "\n";
 		}
 		else {
 			std::cout << "Nothing wasn't find\n----------------------------------------\n";
