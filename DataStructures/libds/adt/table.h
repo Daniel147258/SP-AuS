@@ -392,7 +392,7 @@ namespace ds::adt {
     {
         if (this->contains(key))
         {
-            //this->error("Table already contains element associated with given key!");
+            this->error("Table already contains element associated with given key!");
             return false;
         }
         TabItem<K, T>& tableItem = this->getSequence()->insertFirst().data_;
@@ -436,7 +436,7 @@ namespace ds::adt {
             BlockType* block = nullptr;
             if (this->tryFindBlockWithKey(key, 0, this->size(), block))
             {
-                //this->error("Table already contains element associated with given key!");
+                this->error("Table already contains element associated with given key!");
                 return false;
             }
             tableItem = key > block->data_.key_

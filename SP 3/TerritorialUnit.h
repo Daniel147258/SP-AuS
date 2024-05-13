@@ -2,6 +2,8 @@
 #include <string>
 #include <functional>
 
+
+
 class TerritorialUnit {
 
 private:

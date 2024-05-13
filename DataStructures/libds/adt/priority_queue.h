@@ -545,9 +545,7 @@ namespace ds::adt {
     template<typename P, typename T>
     T& BinaryHeap<P, T>::peek()
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+       
     }
 
     template<typename P, typename T>
