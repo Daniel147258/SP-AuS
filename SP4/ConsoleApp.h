@@ -20,6 +20,8 @@ private:
 	Block* endIt_ = nullptr; // posledny block pri prehladavani nevymazovat 
 	SortingAlgorithms* alg_ = new SortingAlgorithms();
 
+
+	//Aplikacne metody pre konzolovu aplikaciu
 	void baseOptions()
 	{
 		std::string chooseOption = "LOPASK";
@@ -468,8 +470,6 @@ private:
 		}
 	}
 
-
-
 	void tableOption() {
 		while (!end_) {
 			std::string chooseOption;
@@ -497,7 +497,7 @@ public:
 			delete it_;
 		}
 		delete alg_;
-
+		
 	}
 
 	void runApp() {
@@ -651,6 +651,7 @@ public:
 
 
 	//Predikaty
+
 	std::function<bool(TerritorialUnit*)> startWithStrPredicate(std::string& param) {
 		auto startsWithPr = [param](TerritorialUnit* unit) {
 			return unit->getName().substr(0, param.length()) == param;
