@@ -13,7 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SP 3", "SP 3\SP 3.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SP4", "SP4\SP4.vcxproj", "{7AE1591C-BAAF-4AF1-92B6-CA2AC6BEEA6C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gui", "..\..\..\Desktop\AUS-VS20222\AUS-VS2022\DataStructures\Gui\Gui.vcxproj", "{C8ACF493-2520-4681-9DE7-9B1883476F55}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gui", "Gui\Gui.vcxproj", "{C8ACF493-2520-4681-9DE7-9B1883476F55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
